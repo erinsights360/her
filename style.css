@@ -1,0 +1,303 @@
+/* RESEARCH: Using CSS Variables for maintainability and easy color adjustment */
+:root {
+    --color-primary-light: #ff6b9d; /* Soft Rose */
+    --color-primary-dark: #c44569; /* Deep Rose */
+    --color-accent: #ffd700; /* Gold Sparkle */
+    --color-background-start: #1c1c3c; /* Deep Violet (Dark Mode) */
+    --color-background-end: #3d3d6e; /* Deep Indigo (Dark Mode) */
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Poppins', sans-serif;
+    --heart-size: 200px;
+    --transition-timing: 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Elegant easing */
+}
+
+/* Global Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    /* Cinematic Background Gradient */
+    background: linear-gradient(135deg, var(--color-background-start) 0%, var(--color-background-end) 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    color: #ffffff;
+}
+
+/* --- Loading Screen: Cinematic Fade In/Out --- */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0d0d1e; /* Absolute black for dramatic contrast */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 1;
+    /* RESEARCH: Long transition time for cinematic "slow in" effect */
+    transition: opacity 1s ease-in-out 2s; 
+}
+
+.loading-text {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    animation: pulse 1.5s infinite;
+    font-family: var(--font-display);
+    letter-spacing: 2px;
+}
+
+.gift-loading {
+    font-size: 4rem;
+    animation: bounce 1s infinite;
+}
+
+/* --- Main Content Area --- */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.fade-in {
+    opacity: 1;
+}
+
+.hero-message {
+    font-family: var(--font-display);
+    font-size: 4.5rem;
+    font-weight: 900;
+    /* Elegant Gradient Text */
+    background: linear-gradient(45deg, var(--color-primary-light), var(--color-accent), var(--color-primary-light));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 10px rgba(255, 208, 0, 0.5); /* Subtle glow */
+    animation: rainbow 3s ease-in-out infinite, float 4s ease-in-out infinite;
+    z-index: 10;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+/* --- Photo Styling --- */
+.photo-container {
+    position: relative;
+    margin-bottom: 40px;
+    z-index: 10;
+}
+
+.birthday-photo {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    border: 10px solid #fff;
+    /* Soft, luxurious edge glow */
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2), 0 0 50px var(--color-accent);
+    object-fit: cover;
+    animation: photo-subtle-float 5s ease-in-out infinite;
+}
+
+/* --- The Dynamic Heart: CSS Shape & Cinematic Glow --- */
+.heart-container {
+    position: relative;
+    margin: 50px 0;
+    width: var(--heart-size);
+    height: var(--heart-size);
+    z-index: 50; 
+    opacity: 0; /* Initially hidden */
+    transition: opacity 1s var(--transition-timing);
+}
+
+.glowing-heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0); /* Start as tiny/hidden */
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-primary-light);
+    border-radius: 50%; 
+    box-shadow: 0 0 0px var(--color-primary-light);
+    transition: all 1.5s cubic-bezier(0.6, -0.28, 0.735, 0.045); /* Dramatic opening transition */
+}
+
+/* Pseudo-elements for the heart shape */
+.glowing-heart:before,
+.glowing-heart:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    border-radius: 50%;
+    transition: transform 1.5s var(--transition-timing);
+}
+
+.glowing-heart:before {
+    left: calc(var(--heart-size) / -2);
+}
+
+.glowing-heart:after {
+    right: calc(var(--heart-size) / -2);
+}
+
+/* Heart Activation: The transformation and pulse begins */
+.heart-active .heart-container {
+    opacity: 1; 
+}
+
+.heart-active .glowing-heart {
+    animation: cinematic-pulse 3s infinite cubic-bezier(0.2, 0.1, 0.4, 1.6);
+    /* Transform into the heart shape: rotate -45deg and scale up */
+    transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+    background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary-dark));
+    /* Intense, focused glow for energy */
+    box-shadow: 0 0 15px rgba(255, 107, 157, 0.9), 0 0 40px rgba(255, 107, 157, 0.6);
+}
+
+.heart-active .glowing-heart:before {
+    transform: translate(0, calc(var(--heart-size) / -2));
+}
+
+.heart-active .glowing-heart:after {
+    transform: translate(0, calc(var(--heart-size) / -2));
+}
+
+/* --- Message Card & Button Styling --- */
+.birthday-text {
+    max-width: 700px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #ccc;
+    /* Soft, frosted glass effect for luxury */
+    background: rgba(255, 255, 255, 0.05);
+    padding: 35px;
+    border-radius: 25px;
+    margin-bottom: 40px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    line-height: 1.7;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.highlight-text {
+    color: var(--color-accent);
+    font-weight: 600;
+    margin-top: 15px;
+    font-family: var(--font-display);
+    font-style: italic;
+}
+
+.surprise-button {
+    /* Rich, powerful gradient for CTA */
+    background: linear-gradient(45deg, #a77dff, #6236ff);
+    color: white;
+    border: none;
+    padding: 25px 50px;
+    font-size: 1.6rem;
+    font-weight: bold;
+    border-radius: 60px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(98, 54, 255, 0.5);
+    transition: all 0.4s ease;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
+    z-index: 100;
+}
+
+.surprise-button:hover {
+    /* RESEARCH: Use 'Anticipation' principle: scale/translate for feedback */
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 20px 40px rgba(98, 54, 255, 0.8);
+}
+
+/* --- Particle Canvas Layer --- */
+#particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none; /* Crucial for interaction with elements beneath it */
+}
+
+/* --- Refined Keyframes (Animations) --- */
+
+/* Heart Pulse: Uses 'Squash and Stretch' principle for a dramatic beat */
+@keyframes cinematic-pulse {
+    0% { transform: translate(-50%, -50%) rotate(-45deg) scale(1); }
+    50% { transform: translate(-50%, -50%) rotate(-45deg) scale(1.1); } /* Exaggerated beat */
+    100% { transform: translate(-50%, -50%) rotate(-45deg) scale(1); }
+}
+
+/* Subtle Photo Movement */
+@keyframes photo-subtle-float {
+    0% { transform: translateY(0) rotate(0.5deg); }
+    50% { transform: translateY(-5px) rotate(-0.5deg); }
+    100% { transform: translateY(0) rotate(0.5deg); }
+}
+
+/* Text Gradient Shift */
+@keyframes rainbow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Message Float */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* --- Responsiveness for Mobile --- */
+@media (max-width: 768px) {
+    :root {
+        --heart-size: 150px;
+    }
+    .hero-message {
+        font-size: 2.8rem;
+    }
+    .birthday-photo {
+        width: 250px;
+        height: 250px;
+    }
+    .surprise-button {
+        padding: 18px 30px;
+        font-size: 1.2rem;
+    }
+    .birthday-text {
+        font-size: 1rem;
+        padding: 20px;
+    }
+}
